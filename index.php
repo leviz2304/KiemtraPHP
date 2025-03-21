@@ -65,6 +65,9 @@ switch ($action) {
     case 'logout':
         $controller->logout();
                 break;
+                case 'saveRegistration':
+                    $controller->saveRegistration();
+                    break;
     default:
         echo "Action not found.";
         break;

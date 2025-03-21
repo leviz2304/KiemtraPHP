@@ -94,13 +94,11 @@ class HocPhanController {
         $maDK = $_GET['MaDK'];
         $maHP = $_GET['MaHP'];
 
-        // Xóa dòng trong ChiTietDangKy
         $sql = "DELETE FROM ChiTietDangKy WHERE MaDK = ? AND MaHP = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("is", $maDK, $maHP);
         $stmt->execute();
 
-        // Nếu ChiTietDangKy cho MaDK này rỗng => xóa luôn DangKy
         $sql2 = "SELECT COUNT(*) as cnt FROM ChiTietDangKy WHERE MaDK = ?";
         $stmt2 = $this->conn->prepare($sql2);
         $stmt2->bind_param("i", $maDK);
@@ -117,7 +115,6 @@ class HocPhanController {
         exit();
     }
 
-    // Xóa tất cả học phần của 1 SV
     public function removeAll() {
         session_start();
         if (!isset($_SESSION['MaSV'])) {
@@ -144,5 +141,21 @@ class HocPhanController {
 
         header("Location: /Kiemtra/index.php?controller=hocphan&action=showRegistered");
         exit();
+    }
+    public function saveRegistration() {
+        session_start();
+        if (!isset($_SESSION['MaSV'])) {
+            header("Location: /Kiemtra/index.php?controller=auth&action=showLogin");
+            exit();
+        }
+        $maSV = $_SESSION['MaSV'];
+    
+    
+        $sql = "UPDATE DangKy SET status='saved' WHERE MaSV=? AND (status IS NULL OR status='')";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("s", $maSV);
+        $stmt->execute();
+    
+        include __DIR__ . "/../views/hocphan/save_success.php";
     }
 }

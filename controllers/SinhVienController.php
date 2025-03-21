@@ -14,26 +14,21 @@ class SinhVienController {
         $this->sinhVien = new SinhVien($conn);
     }
 
-    // Hiển thị danh sách sinh viên
     public function index() {
         $result = $this->sinhVien->readAll();
         include __DIR__ . "/../views/sinhvien/index.php";
     }
 
-    // Thêm sinh viên mới
     public function add() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            // Populate properties from POST
             $this->sinhVien->MaSV = $_POST['MaSV'];
             $this->sinhVien->HoTen = $_POST['HoTen'];
             $this->sinhVien->GioiTinh = $_POST['GioiTinh'];
             $this->sinhVien->NgaySinh = $_POST['NgaySinh'];
             $this->sinhVien->MaNganh = $_POST['MaNganh'];
             
-            // Process the file upload for the image
             if (isset($_FILES['Hinh_new']) && $_FILES['Hinh_new']['error'] === 0) {
                 $newImageName = time() . "_" . basename($_FILES['Hinh_new']['name']);
-                // Ensure the "images" folder exists and is writable
                 if (move_uploaded_file($_FILES['Hinh_new']['tmp_name'], "images/" . $newImageName)) {
                     $this->sinhVien->Hinh = "images/" . $newImageName;
                 } else {
@@ -42,7 +37,6 @@ class SinhVienController {
                     return;
                 }
             } else {
-                // No image uploaded; set default or empty
                 $this->sinhVien->Hinh = "";
             }
             
@@ -57,7 +51,6 @@ class SinhVienController {
     }
     
 
-    // Sửa thông tin sinh viên
     public function edit() {
         if (!isset($_GET['MaSV'])) {
             die("MaSV not provided.");
@@ -71,10 +64,8 @@ class SinhVienController {
             $this->sinhVien->NgaySinh = $_POST['NgaySinh'];
             $this->sinhVien->MaNganh = $_POST['MaNganh'];
             
-            // Check if a new image was uploaded
             if (isset($_FILES['Hinh_new']) && $_FILES['Hinh_new']['error'] === 0) {
                 $newImageName = time() . "_" . basename($_FILES['Hinh_new']['name']);
-                // Make sure the folder "images" exists and is writable
                 if (move_uploaded_file($_FILES['Hinh_new']['tmp_name'], "images/" . $newImageName)) {
                     $this->sinhVien->Hinh = "images/" . $newImageName;
                 } else {
@@ -84,7 +75,6 @@ class SinhVienController {
                     return;
                 }
             } else {
-                // No new file uploaded, so use the existing image
                 $record = $this->sinhVien->readOne($MaSV);
                 $this->sinhVien->Hinh = $record['Hinh'];
             }
@@ -115,7 +105,6 @@ class SinhVienController {
         }
         $MaSV = $_GET['MaSV'];
     
-        // Lấy thông tin để hiển thị
         $record = $this->sinhVien->readOne($MaSV);
         if (!$record) {
             $error = "Không tìm thấy sinh viên với MaSV = $MaSV.";
@@ -123,7 +112,6 @@ class SinhVienController {
             return;
         }
     
-        // Hiển thị trang confirm
         include __DIR__ . "/../views/sinhvien/confirm-delete.php";
     }
     
@@ -133,7 +121,6 @@ class SinhVienController {
         }
         $MaSV = $_GET['MaSV'];
     
-        // Thực hiện xóa
         if ($this->sinhVien->delete($MaSV)) {
             header("Location: " . dirname($_SERVER['PHP_SELF']) . "/index.php?action=index");
             exit();
@@ -147,7 +134,6 @@ class SinhVienController {
         }
         $MaSV = $_GET['MaSV'];
     
-        // Lấy thông tin sinh viên
         $record = $this->sinhVien->readOne($MaSV);
         if (!$record) {
             $error = "Không tìm thấy sinh viên với MaSV = $MaSV.";
@@ -155,7 +141,6 @@ class SinhVienController {
             return;
         }
     
-        // Hiển thị trang chi tiết
         include __DIR__ . "/../views/sinhvien/detail.php";
     }
 }

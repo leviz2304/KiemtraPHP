@@ -31,11 +31,22 @@ Tổng số tín: <?php echo $tongTin; ?></p>
     <?php endforeach; ?>
 </table>
 
-<p><a href="/Kiemtra/index.php?controller=hocphan&action=removeAll"
-      style="color:red; font-weight:bold;"
-      onclick="return confirm('Bạn có chắc xóa tất cả?');">
-      Xóa tất cả
-</a></p>
+<!-- Nút Lưu đăng ký -->
+<p>
+    <a href="/Kiemtra/index.php?controller=hocphan&action=saveRegistration"
+       style="color:green; font-weight:bold;"
+       onclick="return confirm('Bạn có chắc muốn lưu đăng ký?');">
+       Lưu đăng ký
+    </a>
+</p>
+
+<p>
+    <a href="/Kiemtra/index.php?controller=hocphan&action=removeAll"
+       style="color:red; font-weight:bold;"
+       onclick="return confirm('Bạn có chắc xóa tất cả?');">
+       Xóa tất cả
+    </a>
+</p>
 <?php else: ?>
 <p>Chưa đăng ký học phần nào.</p>
 <?php endif; ?>
